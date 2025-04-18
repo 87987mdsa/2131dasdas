@@ -32,17 +32,26 @@ end
 function UI:Notify(t, d)
     local n = Instance.new("TextLabel", PG)
     n.Size = UDim2.new(0, 150, 0, 40)
-    n.Position = UDim2.new(1, -160, 1, -50)
+    n.Position = UDim2.new(1, 0, 1, -50) -- Posición inicial fuera de pantalla
     n.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
     n.TextColor3 = Color3.new(1, 1, 1)
     n.Text = t
     n.TextSize = 12
     n.Font = Enum.Font.SourceSans
     
-    TS:Create(n, TweenInfo.new(0.3), {Position = UDim2.new(1, -160, 1, -50)}):Play()
-    wait(d or 2)
-    TS:Create(n, TweenInfo.new(0.3), {Position = UDim2.new(1, 0, 1, -50)}):Play():Wait()
-    n:Destroy()
+    -- Animación de entrada
+    local tweenIn = TS:Create(n, TweenInfo.new(0.3), {Position = UDim2.new(1, -160, 1, -50)})
+    tweenIn:Play()
+    tweenIn.Completed:Wait() -- Espera a que termine la animación de entrada
+    
+    wait(d or 2) -- Espera la duración especificada
+    
+    -- Animación de salida
+    local tweenOut = TS:Create(n, TweenInfo.new(0.3), {Position = UDim2.new(1, 0, 1, -50)})
+    tweenOut:Play()
+    tweenOut.Completed:Wait() -- Espera a que termine la animación de salida
+    
+    n:Destroy() -- Destruye la notificación
 end
 
 -- Pestaña
